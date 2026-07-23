@@ -9,6 +9,9 @@ export const DEFAULT_SETTINGS: AppData['settings'] = {
   gradeScale: 10,
   showWeekend: false,
   onboarded: false,
+  lastBackupAt: null,
+  backupSnoozedUntil: null,
+  persistenceRequested: false,
 }
 
 export function emptyData(): AppData {

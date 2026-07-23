@@ -1,10 +1,96 @@
 import clsx from 'clsx'
-import { Download, Trash2, Upload } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { Download, ShieldCheck, ShieldOff, Trash2, Upload } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button, ConfirmDialog, Field, Input, Segmented, Select } from '../components/ui'
+import { backupLabel, backupStatus, downloadBackup } from '../lib/backup'
 import { emptyData, sampleData } from '../lib/seed'
+import {
+  formatBytes,
+  isPersisted,
+  persistenceSupported,
+  requestPersistence,
+  storageUsage,
+  type StorageUsage,
+} from '../lib/storage'
 import { useApp } from '../store'
 import type { AppData } from '../types'
+
+/**
+ * Estado de la protección del almacenamiento, con opción a solicitarla si el
+ * navegador aún no la ha concedido.
+ */
+function StorageProtection() {
+  const [persisted, setPersisted] = useState<boolean | null>(null)
+  const [usage, setUsage] = useState<StorageUsage | null>(null)
+  const [asking, setAsking] = useState(false)
+
+  const refresh = useCallback(async () => {
+    setPersisted(await isPersisted())
+    setUsage(await storageUsage())
+  }, [])
+
+  useEffect(() => {
+    void refresh()
+  }, [refresh])
+
+  if (!persistenceSupported()) {
+    return (
+      <p className="text-muted text-[13px] leading-relaxed">
+        Este navegador no permite proteger el almacenamiento. Descarga copias con regularidad.
+      </p>
+    )
+  }
+
+  const ok = persisted === true
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-start gap-2.5">
+        {ok ? (
+          <ShieldCheck size={17} className="mt-px shrink-0" style={{ color: 'var(--due-ok)' }} />
+        ) : (
+          <ShieldOff size={17} className="text-faint mt-px shrink-0" />
+        )}
+        <div className="min-w-0">
+          <p className="text-[13px] font-medium">
+            {persisted === null
+              ? 'Comprobando…'
+              : ok
+                ? 'Datos protegidos'
+                : 'Sin protección todavía'}
+          </p>
+          <p className="text-muted mt-0.5 text-[12px] leading-relaxed">
+            {ok
+              ? 'El navegador se ha comprometido a no borrar tu cuaderno para liberar espacio.'
+              : 'El navegador podría borrar el cuaderno si le falta espacio o si pasas mucho tiempo sin abrir la app. En iPhone se concede al añadirla a la pantalla de inicio.'}
+          </p>
+          {usage && usage.usage > 0 && (
+            <p className="text-faint mt-1 text-[11px] tabular-nums">
+              Ocupa {formatBytes(usage.usage)}
+              {usage.quota > 0 && ` de ${formatBytes(usage.quota)} disponibles`}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {!ok && persisted !== null && (
+        <Button
+          size="sm"
+          className="self-start"
+          disabled={asking}
+          onClick={async () => {
+            setAsking(true)
+            await requestPersistence()
+            await refresh()
+            setAsking(false)
+          }}
+        >
+          {asking ? 'Solicitando…' : 'Proteger mis datos'}
+        </Button>
+      )}
+    </div>
+  )
+}
 
 function Section({
   title,
@@ -36,13 +122,8 @@ export default function Ajustes() {
   const [message, setMessage] = useState<string | null>(null)
 
   function exportJson() {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `cuaderno-${new Date().toISOString().slice(0, 10)}.json`
-    a.click()
-    URL.revokeObjectURL(url)
+    downloadBackup(data)
+    updateSettings({ lastBackupAt: new Date().toISOString(), backupSnoozedUntil: null })
     setMessage('Copia de seguridad descargada.')
   }
 
@@ -69,6 +150,7 @@ export default function Ajustes() {
   }
 
   const prepOptions = [0, 1, 2, 3, 5, 7]
+  const status = backupStatus(data)
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col">
@@ -188,8 +270,22 @@ export default function Ajustes() {
             ))}
           </div>
 
+          <p
+            className="text-[12px]"
+            style={{
+              color: status.due ? 'var(--due-today)' : 'var(--text-muted)',
+            }}
+          >
+            {backupLabel(status)}
+            {status.due && ' — conviene descargar una nueva.'}
+          </p>
+
           <div className="flex flex-wrap gap-2">
-            <Button icon={<Download size={14} />} onClick={exportJson}>
+            <Button
+              variant={status.due ? 'primary' : 'default'}
+              icon={<Download size={14} />}
+              onClick={exportJson}
+            >
               Descargar copia
             </Button>
             <Button icon={<Upload size={14} />} onClick={() => fileInput.current?.click()}>
@@ -216,6 +312,13 @@ export default function Ajustes() {
             </Button>
           </div>
         </div>
+      </Section>
+
+      <Section
+        title="Protección del almacenamiento"
+        description="Evita que el navegador borre tu cuaderno por falta de espacio o por inactividad."
+      >
+        <StorageProtection />
       </Section>
 
       <Section title="Acerca de">

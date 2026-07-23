@@ -10,7 +10,35 @@ import Horario from './pages/Horario'
 import Materias from './pages/Materias'
 import Notas from './pages/Notas'
 import Tareas from './pages/Tareas'
+import { isPersisted, requestPersistence } from './lib/storage'
 import { AppProvider, useApp } from './store'
+
+/**
+ * Pide una sola vez al navegador que no borre los datos por falta de espacio
+ * ni por inactividad. Se espera a que haya algo que proteger.
+ */
+function StoragePersistence() {
+  const { data, settings, updateSettings } = useApp()
+  const hasContent = data.tasks.length + data.subjects.length + data.notes.length > 0
+
+  useEffect(() => {
+    if (settings.persistenceRequested || !hasContent) return
+    let cancelled = false
+    ;(async () => {
+      if (await isPersisted()) {
+        if (!cancelled) updateSettings({ persistenceRequested: true })
+        return
+      }
+      await requestPersistence()
+      if (!cancelled) updateSettings({ persistenceRequested: true })
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [settings.persistenceRequested, hasContent, updateSettings])
+
+  return null
+}
 
 /** Aplica el tema también fuera del Layout (por ejemplo en la bienvenida). */
 function ThemeSync() {
@@ -57,6 +85,7 @@ export default function App() {
   return (
     <AppProvider>
       <ThemeSync />
+      <StoragePersistence />
       <HashRouter>
         <Rutas />
       </HashRouter>

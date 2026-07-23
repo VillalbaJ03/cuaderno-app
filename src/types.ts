@@ -87,6 +87,12 @@ export interface Settings {
   showWeekend: boolean
   /** Se completó la pantalla de bienvenida. */
   onboarded: boolean
+  /** Fecha ISO de la última copia de seguridad descargada. */
+  lastBackupAt: string | null
+  /** Hasta cuándo no volver a recordar la copia ('yyyy-MM-dd'). */
+  backupSnoozedUntil: string | null
+  /** Ya se pidió al navegador que no borre los datos (para no insistir). */
+  persistenceRequested: boolean
 }
 
 export interface AppData {

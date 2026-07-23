@@ -1,6 +1,7 @@
 import { ArrowUpRight, CalendarOff, Plus, Sparkle } from 'lucide-react'
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import BackupBanner from '../components/BackupBanner'
 import TaskCard from '../components/TaskCard'
 import { useTaskEditor } from '../components/TaskEditor'
 import { Button, EmptyState, Pill, SubjectBadge } from '../components/ui'
@@ -164,6 +165,8 @@ export default function Hoy() {
           Nueva actividad
         </Button>
       </header>
+
+      <BackupBanner />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {stats.map((s) => (
