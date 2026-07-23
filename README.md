@@ -1,5 +1,7 @@
 # Cuaderno — agenda de clases
 
+**En línea: <https://villalbaj03.github.io/cuaderno-app/>**
+
 Aplicación web para anotar lo que mandan en clase: de qué materia es, quién la da, qué día se
 entrega y con cuánta antelación conviene empezar a prepararlo.
 
@@ -71,8 +73,16 @@ un solo archivo.
 
 ## Instalarla en el móvil
 
-1. Publica `dist/` en cualquier hosting estático (Netlify, Vercel, GitHub Pages).
-2. Ábrela en el móvil y usa **«Añadir a pantalla de inicio»**.
+Abre <https://villalbaj03.github.io/cuaderno-app/> en el móvil y usa
+**«Añadir a pantalla de inicio»** desde el menú del navegador.
+
+## Publicar cambios
+
+```bash
+npm run build
+cd dist && git init -b gh-pages && git add -A && git commit -m "Deploy" \
+  && git push --force https://github.com/VillalbaJ03/cuaderno-app.git gh-pages
+```
 
 ## Tecnologías
 
