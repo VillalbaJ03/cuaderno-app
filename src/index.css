@@ -1,0 +1,278 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans:
+    'Segoe UI Variable Display', 'Segoe UI', ui-sans-serif, system-ui, -apple-system, Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ------------------------------------------------------------------
+   Tokens de diseño. El tema oscuro es el principal: superficies que
+   se elevan por color, bordes con bisel y un único acento vivo.
+------------------------------------------------------------------- */
+:root {
+  /* Superficies */
+  --app-bg: #fafafb;
+  --surface: #ffffff;
+  --surface-2: #f4f4f7;
+  --surface-3: #eaeaef;
+  --surface-hover: #f2f2f6;
+
+  /* Trazos */
+  --border: #e6e6ec;
+  --border-strong: #d6d6df;
+  --bevel: rgba(255, 255, 255, 0.9);
+  --panel-shadow: 0 1px 2px rgb(16 17 22 / 0.05), 0 4px 16px -8px rgb(16 17 22 / 0.12);
+  --overlay-shadow: 0 24px 64px -16px rgb(16 17 22 / 0.28);
+
+  /* Texto */
+  --text: #16171b;
+  --text-muted: #5f616c;
+  --text-faint: #8b8d99;
+
+  /* Acento */
+  --accent: #5b3fd6;
+  --accent-hover: #4e34c0;
+  --accent-ring: rgba(91, 63, 214, 0.35);
+  --accent-soft: rgba(91, 63, 214, 0.09);
+  --accent-contrast: #ffffff;
+  --halo: rgba(91, 63, 214, 0.1);
+
+  /* Plazos */
+  --due-late: #cf2b21;
+  --due-today: #b45309;
+  --due-soon: #8a6a00;
+  --due-ok: #10794f;
+
+  /* Materias */
+  --subject-indigo: #4f46d6;
+  --subject-violet: #7b3fc4;
+  --subject-sky: #0d6f9e;
+  --subject-emerald: #10775a;
+  --subject-amber: #8f6209;
+  --subject-rose: #bd2f52;
+  --subject-orange: #b1531b;
+  --subject-teal: #0f7370;
+  --subject-fuchsia: #a52f96;
+  --subject-slate: #4f5563;
+}
+
+.dark {
+  --app-bg: #08090c;
+  --surface: #101117;
+  --surface-2: #171922;
+  --surface-3: #1f2230;
+  --surface-hover: #1a1c26;
+
+  --border: #22242f;
+  --border-strong: #2f3240;
+  --bevel: rgba(255, 255, 255, 0.045);
+  --panel-shadow: 0 1px 0 rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  --overlay-shadow: 0 32px 80px -20px rgb(0 0 0 / 0.75);
+
+  --text: #edeef2;
+  --text-muted: #9b9dab;
+  --text-faint: #6b6e7e;
+
+  --accent: #7c5cff;
+  --accent-hover: #9077ff;
+  --accent-ring: rgba(124, 92, 255, 0.45);
+  --accent-soft: rgba(124, 92, 255, 0.14);
+  --accent-contrast: #ffffff;
+  --halo: rgba(124, 92, 255, 0.16);
+
+  --due-late: #ff6b62;
+  --due-today: #ffa94d;
+  --due-soon: #e3c04a;
+  --due-ok: #3ddc97;
+
+  --subject-indigo: #8b8cff;
+  --subject-violet: #b085f5;
+  --subject-sky: #58b6e8;
+  --subject-emerald: #47d4a0;
+  --subject-amber: #e0b45c;
+  --subject-rose: #f57a97;
+  --subject-orange: #f0955c;
+  --subject-teal: #45c8c0;
+  --subject-fuchsia: #e07ad4;
+  --subject-slate: #9aa1b4;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
+}
+
+/* Halo de color detrás del contenido: da profundidad sin decorar. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(58rem 28rem at 62% -12%, var(--halo), transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.021em;
+}
+
+/* Utilidades -------------------------------------------------------- */
+
+/** Panel elevado: color de superficie, trazo fino y bisel superior. */
+@utility panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--panel-shadow), inset 0 1px 0 var(--bevel);
+}
+
+/** Variante sin sombra, para bloques anidados. */
+@utility panel-flat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+@utility surface {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+@utility text-muted {
+  color: var(--text-muted);
+}
+
+@utility text-faint {
+  color: var(--text-faint);
+}
+
+@utility hairline {
+  border-color: var(--border);
+}
+
+@utility divide-hairline {
+  & > * + * {
+    border-top: 1px solid var(--border);
+  }
+}
+
+/** Etiqueta de sección. */
+@utility eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/** Anillo de foco coherente en toda la app. */
+@utility ring-focus {
+  outline: 2px solid var(--accent-ring);
+  outline-offset: 1px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 28%, transparent);
+}
+
+/* Movimiento: corto y con curva de salida. */
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sheet {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.animate-fade {
+  animation: fade 0.14s ease-out both;
+}
+.animate-pop {
+  animation: pop 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-sheet {
+  animation: sheet 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade,
+  .animate-pop,
+  .animate-sheet {
+    animation: none;
+  }
+}
+
+.pb-safe {
+  padding-bottom: calc(0.375rem + env(safe-area-inset-bottom));
+}
