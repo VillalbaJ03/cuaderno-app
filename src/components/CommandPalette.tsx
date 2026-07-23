@@ -209,7 +209,7 @@ export default function CommandPalette({
         role="dialog"
         aria-modal="true"
         aria-label="Buscar"
-        className="animate-pop relative flex max-h-[70vh] w-full max-w-xl flex-col overflow-hidden rounded-xl border"
+        className="animate-pop overlay-h-sm relative flex w-full max-w-xl flex-col overflow-hidden rounded-xl border"
         style={{
           background: 'var(--surface)',
           borderColor: 'var(--border-strong)',

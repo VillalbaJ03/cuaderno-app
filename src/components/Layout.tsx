@@ -229,7 +229,7 @@ export default function Layout() {
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-28 sm:px-8 lg:pt-8 lg:pb-14">
+        <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-[calc(7rem+env(safe-area-inset-bottom))] sm:px-8 lg:pt-8 lg:pb-14">
           <Outlet />
         </main>
       </div>
@@ -238,7 +238,7 @@ export default function Layout() {
       <button
         onClick={() => openTaskEditor()}
         aria-label="Nueva actividad"
-        className="fixed right-4 bottom-[76px] z-40 flex h-12 w-12 items-center justify-center rounded-2xl transition-transform active:scale-95 lg:hidden"
+        className="fixed right-4 bottom-[calc(72px+env(safe-area-inset-bottom))] z-40 flex h-12 w-12 items-center justify-center rounded-2xl transition-transform active:scale-95 lg:hidden"
         style={{
           background: 'var(--accent)',
           color: 'var(--accent-contrast)',

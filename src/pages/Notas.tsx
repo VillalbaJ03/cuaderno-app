@@ -143,7 +143,7 @@ export default function Notas() {
                     <button
                       onClick={() => setConfirm(note.id)}
                       aria-label="Eliminar nota"
-                      className="text-faint rounded p-1 opacity-0 transition-all group-hover:opacity-100 hover:bg-[color:var(--surface-3)] focus:opacity-100"
+                      className="text-faint touch-visible rounded p-1 opacity-0 transition-all group-hover:opacity-100 hover:bg-[color:var(--surface-3)] focus:opacity-100"
                     >
                       <Trash2 size={13} />
                     </button>

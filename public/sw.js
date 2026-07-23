@@ -1,5 +1,5 @@
 /* Service worker mínimo: deja la app disponible sin conexión. */
-const CACHE = 'cuaderno-v1'
+const CACHE = 'cuaderno-v2'
 
 self.addEventListener('install', (event) => {
   self.skipWaiting()

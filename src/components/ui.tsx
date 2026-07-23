@@ -192,7 +192,7 @@ export function Modal({
         aria-modal="true"
         aria-label={title}
         className={clsx(
-          'animate-sheet relative flex max-h-[92vh] w-full flex-col overflow-hidden',
+          'animate-sheet overlay-h relative flex w-full flex-col overflow-hidden',
           'rounded-t-2xl border sm:rounded-xl',
           wide ? 'sm:max-w-2xl' : 'sm:max-w-md',
         )}
