@@ -121,10 +121,15 @@ export default function Ajustes() {
   const [confirmSample, setConfirmSample] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
 
-  function exportJson() {
-    downloadBackup(data)
+  async function exportJson() {
+    const result = await downloadBackup(data)
+    if (result === 'cancelado') return
     updateSettings({ lastBackupAt: new Date().toISOString(), backupSnoozedUntil: null })
-    setMessage('Copia de seguridad descargada.')
+    setMessage(
+      result === 'compartido'
+        ? 'Copia creada. Elige «Guardar en Archivos» para conservarla en el teléfono.'
+        : 'Copia de seguridad descargada.',
+    )
   }
 
   function importJson(file: File) {
@@ -250,7 +255,7 @@ export default function Ajustes() {
 
       <Section
         title="Datos"
-        description="Todo se guarda en este navegador. Descarga una copia para conservarla o pasarla a otro dispositivo."
+        description="Todo se guarda en este navegador. Guarda una copia para conservarla o pasarla a otro dispositivo: en el móvil se abre la hoja de compartir (Archivos, correo, WhatsApp) y en el ordenador se descarga el archivo."
       >
         <div className="flex flex-col gap-4">
           <div
@@ -286,7 +291,7 @@ export default function Ajustes() {
               icon={<Download size={14} />}
               onClick={exportJson}
             >
-              Descargar copia
+              Guardar copia
             </Button>
             <Button icon={<Upload size={14} />} onClick={() => fileInput.current?.click()}>
               Restaurar copia

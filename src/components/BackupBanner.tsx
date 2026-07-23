@@ -32,8 +32,8 @@ export default function BackupBanner() {
       <div className="min-w-0 flex-1">
         <p className="text-[13px] font-medium">{message}</p>
         <p className="text-faint mt-0.5 text-[12px] leading-relaxed">
-          Todo se guarda solo en este dispositivo. Descarga el archivo y guárdalo donde no se
-          pierda.
+          Todo se guarda solo en este dispositivo. Guarda el archivo donde no se pierda: en el
+          móvil, «Guardar en Archivos» o envíatelo por correo.
         </p>
       </div>
 
@@ -42,12 +42,13 @@ export default function BackupBanner() {
           variant="primary"
           size="sm"
           icon={<Download size={13} />}
-          onClick={() => {
-            downloadBackup(data)
+          onClick={async () => {
+            const result = await downloadBackup(data)
+            if (result === 'cancelado') return
             updateSettings({ lastBackupAt: new Date().toISOString(), backupSnoozedUntil: null })
           }}
         >
-          Descargar copia
+          Guardar copia
         </Button>
         <button
           onClick={() => updateSettings({ backupSnoozedUntil: shiftKey(todayKey(), SNOOZE_DAYS) })}

@@ -7,15 +7,44 @@ function daysAgo(iso: string): number {
   return Math.floor(diff / 86_400_000)
 }
 
-/** Descarga todo el cuaderno como archivo JSON. */
-export function downloadBackup(data: AppData): void {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
+export type BackupResult = 'compartido' | 'descargado' | 'cancelado'
+
+/**
+ * Guarda todo el cuaderno como archivo JSON.
+ *
+ * En el móvil abre la hoja de compartir del sistema («Guardar en Archivos»,
+ * enviarlo por correo…), que es la única vía cómoda en iOS. En escritorio, o
+ * si el navegador no la admite, cae en una descarga normal.
+ *
+ * Debe llamarse desde un gesto del usuario: compartir lo exige.
+ */
+export async function downloadBackup(data: AppData): Promise<BackupResult> {
+  const name = `cuaderno-${todayKey()}.json`
+  const file = new File([JSON.stringify(data, null, 2)], name, { type: 'application/json' })
+
+  if (typeof navigator !== 'undefined' && navigator.canShare?.({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: 'Copia de Cuaderno' })
+      return 'compartido'
+    } catch (error) {
+      // Si cancela la hoja, no insistimos con una descarga que no pidió.
+      if ((error as Error)?.name === 'AbortError') return 'cancelado'
+      // Cualquier otro fallo: seguimos con la descarga clásica.
+    }
+  }
+
+  const url = URL.createObjectURL(file)
   const a = document.createElement('a')
   a.href = url
-  a.download = `cuaderno-${todayKey()}.json`
+  a.download = name
+  a.rel = 'noopener'
+  // Safari exige que el enlace esté en el documento para respetar `download`.
+  document.body.appendChild(a)
   a.click()
-  URL.revokeObjectURL(url)
+  a.remove()
+  // Revocar de inmediato aborta la descarga en Safari; le damos margen.
+  setTimeout(() => URL.revokeObjectURL(url), 60_000)
+  return 'descargado'
 }
 
 /** Se recuerda la copia cuando ha pasado este tiempo desde la última. */
