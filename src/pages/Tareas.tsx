@@ -87,14 +87,11 @@ export default function Tareas() {
             {filtered.length} {filtered.length === 1 ? 'actividad' : 'actividades'} en esta vista.
           </p>
         </div>
-        <Button
-          variant="primary"
-          icon={<Plus size={15} />}
-          onClick={() => openTaskEditor()}
-          className="hidden lg:inline-flex"
-        >
-          Nueva actividad
-        </Button>
+        <div className="hidden lg:block">
+          <Button variant="primary" icon={<Plus size={15} />} onClick={() => openTaskEditor()}>
+            Nueva actividad
+          </Button>
+        </div>
       </header>
 
       <div className="flex flex-col gap-3">
@@ -152,7 +149,7 @@ export default function Tareas() {
         </div>
 
         {showFilters && (
-          <div className="panel animate-fade grid gap-2 p-2 sm:grid-cols-2">
+          <div className="panel animate-fade grid grid-cols-1 gap-2 p-2 sm:grid-cols-2">
             <Select value={subjectId} onChange={(e) => setSubjectId(e.target.value)}>
               <option value="">Todas las materias</option>
               {subjects.map((s) => (

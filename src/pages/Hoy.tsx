@@ -156,14 +156,13 @@ export default function Hoy() {
             {firstName ? `Hola, ${firstName}` : 'Tu día'}
           </h1>
         </div>
-        <Button
-          variant="primary"
-          icon={<Plus size={15} />}
-          onClick={() => openTaskEditor()}
-          className="hidden lg:inline-flex"
-        >
-          Nueva actividad
-        </Button>
+        {/* El envoltorio controla la visibilidad: `hidden` sobre el propio
+            botón perdería frente a su `inline-flex` de base. */}
+        <div className="hidden lg:block">
+          <Button variant="primary" icon={<Plus size={15} />} onClick={() => openTaskEditor()}>
+            Nueva actividad
+          </Button>
+        </div>
       </header>
 
       <BackupBanner />
@@ -174,9 +173,9 @@ export default function Hoy() {
         ))}
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1.65fr)_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1.65fr)_minmax(0,1fr)]">
         {/* Columna principal */}
-        <div className="flex flex-col gap-7">
+        <div className="flex min-w-0 flex-col gap-7">
           {nothingUrgent && (
             <div className="panel">
               <EmptyState
@@ -221,7 +220,7 @@ export default function Hoy() {
         </div>
 
         {/* Columna lateral */}
-        <div className="flex flex-col gap-7">
+        <div className="flex min-w-0 flex-col gap-7">
           <section>
             <div className="mb-2.5 flex items-center justify-between px-0.5">
               <h2 className="eyebrow">Clases de hoy</h2>

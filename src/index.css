@@ -112,6 +112,27 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Red de seguridad: ninguna vista debe provocar desplazamiento lateral.
+   `clip` en vez de `hidden` porque este último rompería los elementos
+   `sticky` de la cabecera y la barra lateral. */
+html,
+body,
+#root {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* Enlaces pegados, códigos o palabras larguísimas parten de línea en lugar
+   de ensanchar su contenedor. */
+p,
+h1,
+h2,
+h3,
+dd,
+li {
+  overflow-wrap: break-word;
+}
+
 body {
   margin: 0;
   background: var(--app-bg);

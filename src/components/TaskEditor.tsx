@@ -244,7 +244,7 @@ export function TaskEditorProvider({ children }: { children: ReactNode }) {
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Materia">
                 <Select
                   value={draft.subjectId ?? ''}
@@ -274,7 +274,7 @@ export function TaskEditorProvider({ children }: { children: ReactNode }) {
               </Field>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
               <Field label="Día de entrega o presentación">
                 <Input
                   type="date"
@@ -396,7 +396,7 @@ export function TaskEditorProvider({ children }: { children: ReactNode }) {
               </div>
             </div>
 
-            <div className="hairline grid gap-4 border-t pt-5 sm:grid-cols-3">
+            <div className="hairline grid grid-cols-1 gap-4 border-t pt-5 sm:grid-cols-3">
               <Field label="Estado">
                 <Select
                   value={draft.status}

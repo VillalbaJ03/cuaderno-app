@@ -102,7 +102,7 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <section className="hairline grid gap-4 border-t py-6 sm:grid-cols-[220px_minmax(0,1fr)] sm:gap-8">
+    <section className="hairline grid grid-cols-1 gap-4 border-t py-6 sm:grid-cols-[220px_minmax(0,1fr)] sm:gap-8">
       <div>
         <h2 className="text-[13px] font-semibold">{title}</h2>
         {description && (
@@ -173,7 +173,7 @@ export default function Ajustes() {
       )}
 
       <Section title="Perfil" description="Solo se usa para el saludo y la escala de notas.">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="Nombre">
             <Input
               value={settings.studentName}

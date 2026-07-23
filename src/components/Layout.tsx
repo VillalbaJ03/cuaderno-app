@@ -130,7 +130,7 @@ export default function Layout() {
   const current = ALL_NAV.find((i) => location.pathname.startsWith(i.to))
 
   return (
-    <div className="flex min-h-full">
+    <div className="flex min-h-full w-full">
       {/* Barra lateral — escritorio */}
       <aside
         className="hairline sticky top-0 hidden h-screen w-[236px] shrink-0 flex-col border-r px-3 py-4 lg:flex"
@@ -229,7 +229,7 @@ export default function Layout() {
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-[calc(7rem+env(safe-area-inset-bottom))] sm:px-8 lg:pt-8 lg:pb-14">
+        <main className="mx-auto w-full min-w-0 max-w-5xl flex-1 px-4 pt-6 pb-[calc(7rem+env(safe-area-inset-bottom))] sm:px-8 lg:pt-8 lg:pb-14">
           <Outlet />
         </main>
       </div>

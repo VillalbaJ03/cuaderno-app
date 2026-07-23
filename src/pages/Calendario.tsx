@@ -77,7 +77,7 @@ export default function Calendario() {
         </div>
       </header>
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <section className="panel p-3 sm:p-4">
           <h2 className="mb-3 text-[13px] font-medium">
             {capitalize(format(cursor, 'MMMM yyyy', { locale: es }))}
@@ -173,7 +173,7 @@ export default function Calendario() {
           </div>
         </section>
 
-        <section className="flex flex-col gap-4">
+        <section className="flex min-w-0 flex-col gap-4">
           <div className="panel overflow-hidden">
             <div className="hairline flex items-center justify-between gap-3 border-b px-3 py-2.5">
               <h2 className="text-[13px] font-medium">
